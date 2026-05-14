@@ -216,7 +216,7 @@ export function Contacts() {
                     onClick={() =>
                       handleEdit(contact)
                     }
-                    className="bg-yellow-400 hover:bg-yellow-500 transition text-white px-4 py-2 rounded-lg"
+                    className="bg-white text-sky-600 px-4 py-2 rounded-lg font-semibold hover:bg-sky-100 transition"
                   >
                     Editar
                   </button>
