@@ -4,6 +4,8 @@ import { api } from "../services/api";
 
 import { Header } from "../components/Header";
 import { ClientForm } from "../components/ClientForm";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 interface Client {
   id: string;
@@ -27,36 +29,74 @@ export function Clients() {
     setClients(response.data);
   }
 
-  async function createClient(data: {
-    fullName: string;
-    email: string;
-    phone: string;
-  }) {
+async function createClient(data: {
+  fullName: string;
+  email: string;
+  phone: string;
+}) {
+  try {
     if (editingClient) {
       await api.put(
         `/clients/${editingClient.id}`,
         data
       );
 
+      toast.success(
+        "Cliente atualizado!"
+      );
+
       setEditingClient(null);
     } else {
       await api.post("/clients", data);
+
+      toast.success(
+        "Cliente criado!"
+      );
     }
 
     loadClients();
-  }
-
-  async function deleteClient(id: string) {
-    const confirmDelete = confirm(
-      "Deseja excluir este cliente?"
+  } catch (error: any) {
+    toast.error(
+      error.response?.data?.error ||
+        "Erro ao salvar cliente"
     );
+  }
+}
 
-    if (!confirmDelete) return;
+async function deleteClient(id: string) {
+  const result = await Swal.fire({
+    title: "Excluir cliente?",
+    text:
+      "Essa ação não poderá ser desfeita.",
+    icon: "warning",
 
+    showCancelButton: true,
+
+    confirmButtonColor: "#e11d48",
+
+    cancelButtonColor: "#0ea5e9",
+
+    confirmButtonText: "Excluir",
+
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
     await api.delete(`/clients/${id}`);
 
+    toast.success(
+      "Cliente excluído!"
+    );
+
     loadClients();
+  } catch {
+    toast.error(
+      "Erro ao excluir cliente"
+    );
   }
+}
 
   function handleEdit(client: Client) {
     setEditingClient(client);

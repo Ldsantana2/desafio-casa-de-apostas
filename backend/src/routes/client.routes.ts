@@ -7,42 +7,72 @@ const router = Router();
 router.use(authMiddleware);
 
 router.post("/", async (req, res) => {
-  const client = await prisma.client.create({
-    data: req.body
-  });
+  try {
+    const client = await prisma.client.create({
+      data: req.body,
+    });
 
-  return res.json(client);
+    return res.status(201).json(client);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        "Erro ao criar cliente. Email ou telefone já cadastrado.",
+    });
+  }
 });
 
 router.get("/", async (req, res) => {
-  const clients = await prisma.client.findMany({
-    include: {
-      contacts: true
-    }
-  });
+  try {
+    const clients =
+      await prisma.client.findMany({
+        include: {
+          contacts: true,
+        },
+      });
 
-  return res.json(clients);
+    return res.json(clients);
+  } catch (error) {
+    return res.status(500).json({
+      error:
+        "Erro ao buscar clientes.",
+    });
+  }
 });
 
 router.put("/:id", async (req, res) => {
-  const client = await prisma.client.update({
-    where: {
-      id: req.params.id
-    },
-    data: req.body
-  });
+  try {
+    const client =
+      await prisma.client.update({
+        where: {
+          id: req.params.id,
+        },
+        data: req.body,
+      });
 
-  return res.json(client);
+    return res.json(client);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        "Erro ao atualizar cliente.",
+    });
+  }
 });
 
 router.delete("/:id", async (req, res) => {
-  await prisma.client.delete({
-    where: {
-      id: req.params.id
-    }
-  });
+  try {
+    await prisma.client.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
 
-  return res.sendStatus(204);
+    return res.sendStatus(204);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        "Erro ao excluir cliente.",
+    });
+  }
 });
 
 export default router;

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { Header } from "../components/Header";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 import { api } from "../services/api";
 
@@ -56,11 +58,12 @@ export function Contacts() {
     setContacts(response.data);
   }
 
-  async function handleSubmit(
-    e: React.FormEvent
-  ) {
-    e.preventDefault();
+async function handleSubmit(
+  e: React.FormEvent
+) {
+  e.preventDefault();
 
+  try {
     const data = {
       fullName,
       email,
@@ -74,9 +77,17 @@ export function Contacts() {
         data
       );
 
+      toast.success(
+        "Contato atualizado!"
+      );
+
       setEditingContact(null);
     } else {
       await api.post("/contacts", data);
+
+      toast.success(
+        "Contato criado!"
+      );
     }
 
     setFullName("");
@@ -85,19 +96,49 @@ export function Contacts() {
     setClientId("");
 
     loadContacts();
-  }
-
-  async function deleteContact(id: string) {
-    const confirmDelete = confirm(
-      "Deseja excluir este contato?"
+  } catch (error: any) {
+    toast.error(
+      error.response?.data?.error ||
+        "Erro ao salvar contato"
     );
+  }
+}
 
-    if (!confirmDelete) return;
+async function deleteContact(id: string) {
+  const result = await Swal.fire({
+    title: "Excluir contato?",
+    text:
+      "Essa ação não poderá ser desfeita.",
 
+    icon: "warning",
+
+    showCancelButton: true,
+
+    confirmButtonColor: "#e11d48",
+
+    cancelButtonColor: "#0ea5e9",
+
+    confirmButtonText: "Excluir",
+
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
     await api.delete(`/contacts/${id}`);
 
+    toast.success(
+      "Contato excluído!"
+    );
+
     loadContacts();
+  } catch {
+    toast.error(
+      "Erro ao excluir contato"
+    );
   }
+}
 
   function handleEdit(contact: Contact) {
     setEditingContact(contact);
