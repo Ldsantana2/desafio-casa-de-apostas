@@ -93,17 +93,19 @@ Um cliente pode possuir vários contatos.
 
 ---
 
+# Como Rodar o Projeto
+
 # Backend
 
-## Instalação
-
-Entre na pasta backend:
+## 1. Acesse a pasta backend
 
 ```bash
 cd backend
 ```
 
-Instale as dependências:
+---
+
+# 2. Instale as dependências
 
 ```bash
 npm install
@@ -111,7 +113,15 @@ npm install
 
 ---
 
-# Configuração do .env
+# 3. Suba o banco PostgreSQL com Docker
+
+```bash
+docker compose up -d
+```
+
+---
+
+# 4. Configure o arquivo .env
 
 Crie um arquivo:
 
@@ -128,7 +138,7 @@ JWT_SECRET="secret"
 
 ---
 
-# Rodar migrations
+# 5. Execute as migrations
 
 ```bash
 npx prisma migrate dev
@@ -136,7 +146,7 @@ npx prisma migrate dev
 
 ---
 
-# Gerar Prisma Client
+# 6. Gere o Prisma Client
 
 ```bash
 npx prisma generate
@@ -144,13 +154,13 @@ npx prisma generate
 
 ---
 
-# Rodar backend
+# 7. Rode o backend
 
 ```bash
 npm run dev
 ```
 
-Servidor:
+Servidor disponível em:
 
 ```txt
 http://localhost:3333
