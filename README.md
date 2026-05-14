@@ -370,19 +370,6 @@ O sistema utiliza:
 
 ---
 
-# Melhorias Futuras
-
-- edição completa no frontend
-- validação de formulários
-- toast notifications
-- paginação
-- geração de PDF
-- Docker
-- testes automatizados
-- deploy em nuvem
-
----
-
 # Autor
 
 Projeto desenvolvido por Lucas Dantas.
