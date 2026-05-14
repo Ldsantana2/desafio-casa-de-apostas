@@ -385,4 +385,4 @@ O sistema utiliza:
 
 # Autor
 
-Projeto desenvolvido por Lucas Santos.
+Projeto desenvolvido por Lucas Dantas.
